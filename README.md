@@ -104,40 +104,6 @@ The API seeds an admin account on first boot:
 
 (Change `ADMIN_EMAIL` / `ADMIN_PASSWORD` in your env before deploying publicly.)
 
-## Deployment
-
-### Backend → Render
-
-1. Push this repo to GitHub.
-2. In Render, choose **New → Blueprint** and point it at the repo — it will
-   read `backend/render.yaml` and provision both the web service and a free
-   PostgreSQL database automatically.
-   - Or manually: **New → Web Service**, root directory `backend`, runtime
-     **Docker**, health check path `/api/health`.
-3. Set environment variables (Render blueprint pre-fills most):
-   - `DATABASE_URL` — from your Postgres instance (Render or Railway both work)
-   - `SECRET_KEY` — long random string
-   - `CORS_ORIGINS` — your Vercel URL, e.g. `https://your-app.vercel.app`
-   - `ADMIN_EMAIL` / `ADMIN_PASSWORD`
-4. Once deployed, Swagger docs are live at `https://<your-api>.onrender.com/api/docs`.
-
-> Using Railway for Postgres instead? Create a Postgres plugin there, copy its
-> `DATABASE_URL`, and paste it into Render's `DATABASE_URL` env var — the
-> backend already normalizes `postgres://` → `postgresql://`.
-
-### Frontend → Vercel
-
-1. Import the repo in Vercel, set the project root to `frontend`.
-2. Framework preset: **Vite**.
-3. Environment variable: `VITE_API_URL=https://<your-api>.onrender.com`.
-4. Deploy. `vercel.json` handles SPA routing/rewrites.
-
-### Database → Railway (alternative to Render's managed Postgres)
-
-1. New Project → Provision PostgreSQL.
-2. Copy the `DATABASE_URL` connection string into your Render service's env vars.
-3. Tables are created automatically on API startup (`Base.metadata.create_all`).
-
 ## API documentation
 
 FastAPI generates interactive docs automatically:
